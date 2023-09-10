@@ -65,7 +65,7 @@ p {
   <body>
     <h1>Welcome to Serenade!</h1>
     <p>With Serenade, you can write code faster&mdash;by speaking in plain English, rather than typing. Use Serenade as your coding assistant, or abandon your keyboard entirely.</p>
-    <p>To get started, download the Serenade app and run it alongside VS Code.</p>
+    <p>To get started, download the Serenade app and run it alongside Cursor.</p>
     <a class="download" href="#">Download</a>
   </body>
   <script>
@@ -110,12 +110,12 @@ document.querySelector('.download').addEventListener('click', e => {
     this.initialized = true;
     this.settings = new Settings();
     this.commandHandler = new CommandHandler(this.settings);
-    this.ipc = new IPC(this.commandHandler, "vscode");
+    this.ipc = new IPC(this.commandHandler, "cursor");
 
     this.ipc.start();
     this.checkInstalled();
     this.commandHandler.pollActiveEditor();
-    this.settings.setPluginInstalled("vscode");
+    this.settings.setPluginInstalled("cursor");
 
     vscode.window.onDidChangeActiveTextEditor(() => {
       this.ipc!.sendActive();

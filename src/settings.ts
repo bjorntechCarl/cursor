@@ -93,6 +93,10 @@ export default class Settings {
     return this.get("system", "code");
   }
 
+  getCursor(): boolean {
+    return this.get("system", "cursor");
+  }
+
   getInstalled(): boolean {
     return this.get("system", "installed");
   }

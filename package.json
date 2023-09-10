@@ -1,11 +1,11 @@
 {
-  "name": "serenade",
+  "name": "serenade-cursor",
   "description": "Code with voice. Learn more at https://serenade.ai.",
-  "displayName": "Serenade",
+  "displayName": "Serenade-Cursor",
   "license": "MIT",
   "publisher": "serenade",
-  "repository": "https://github.com/serenadeai/code",
-  "version": "1.5.3",
+  "repository": "https://github.com/bjorntechCarl/cursor",
+  "version": "1.5.4",
   "extensionKind": "ui",
   "icon": "icon.png",
   "engines": {
