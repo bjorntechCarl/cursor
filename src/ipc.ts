@@ -1,5 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 import NodeWebSocket from "ws";
+import fs from 'fs';
+import path from 'path';
 
 export default class IPC {
   private app: string;
@@ -108,9 +110,13 @@ export default class IPC {
   }
 
   sendActive() {
-    let result = this.send("active", {
+    const icon = fs.readFileSync(path.join(__dirname, 'cursor.png')).toString('base64');
+    const dataURL = `data:image/png;base64,${icon}`;
+    this.send("active", {
       app: this.app,
       id: this.id,
+      match: "cursor",
+      icon: dataURL
     });
   }
 
