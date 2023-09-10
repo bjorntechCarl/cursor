@@ -2,6 +2,7 @@ import * as vscode from "vscode";
 import * as diff from "./diff";
 import Settings from "./settings";
 const ignoreParser: any = require("gitignore-globs");
+import * as path from 'path';
 
 export default class CommandHandler {
   private activeEditor?: vscode.TextEditor;
@@ -385,7 +386,69 @@ export default class CommandHandler {
   }
 
   async COMMAND_TYPE_EVALUATE_IN_PLUGIN(data: any): Promise<any> {
-    vscode.commands.executeCommand(data.text);
+    const input = (data.text || "").trim();
+
+    console.log("eval in plugin input");
+
+    //Check if the input starts with touch
+    if (input.startsWith("touch")) {
+      console.log("touching file");
+      //Extract everything after touch and space
+      const fileUri = input.substring(6)
+      await this.COMMAND_TYPE_TOUCH(fileUri);
+    } else if (input.startsWith("remove")) {
+      console.log("removing file");
+      //Extract everything after remove and space
+      const fileUri = input.substring(7)
+      await this.COMMAND_TYPE_REMOVE(fileUri);
+    } else {
+      console.log("executing command");
+      vscode.commands.executeCommand(data.text);
+    }
+
+  }
+
+  async COMMAND_TYPE_TOUCH(data: any): Promise<any> {
+    // Get current folder as the location of the currently selected file
+    const currentFile = vscode.window.activeTextEditor?.document.uri.fsPath;
+    const currentFolder = currentFile ? path.dirname(currentFile) : '';
+    const filePath = path.join(currentFolder, data);
+  
+    const fileUri = vscode.Uri.file(filePath);
+    const fileContent = Buffer.from('');
+    await vscode.workspace.fs.writeFile(fileUri, fileContent);
+    await vscode.window.showTextDocument(fileUri);  
+  }
+
+  async COMMAND_TYPE_REMOVE(data: any): Promise<any> {
+    const fileUri = vscode.Uri.file(data);
+    await vscode.workspace.fs.delete(fileUri);
+  }
+
+  //Command that enters text into chat codebase
+
+  async COMMAND_TYPE_CHAT_ASK_CODEBASE(_data: any): Promise<any> {
+    await vscode.commands.executeCommand("aichat.doAdvancedCodebaseQuery");
+  }
+
+  //Command that enters text into chat codebase
+  async COMMAND_TYPE_CHAT_FOLLOWUP(_data: any): Promise<any> {
+    await vscode.commands.executeCommand("aichat.newfollowupaction");
+  }
+
+  //Command that opens up new chat
+  async COMMAND_TYPE_CHAT_NEW(_data: any): Promise<any> {
+    await vscode.commands.executeCommand("aichat.newchataction");
+  }
+
+  //Command that focus on the chat window
+  async COMMAND_TYPE_CHAT_FOCUS(_data: any): Promise<any> {
+    await vscode.commands.executeCommand("aichat.focus");
+  }
+
+  //Command that toggles between chats
+  async COMMAND_TYPE_CHAT_TOGGLE(_data: any): Promise<any> {
+    await vscode.commands.executeCommand("aichat.switchToMostRecentChat");
   }
 
   async COMMAND_TYPE_GO_TO_DEFINITION(_data: any): Promise<any> {

@@ -110,7 +110,7 @@ export default class IPC {
   }
 
   sendActive() {
-    const icon = fs.readFileSync(path.join(__dirname, 'cursor.png')).toString('base64');
+    const icon = fs.readFileSync(path.join(__dirname, '../cursor.png')).toString('base64');
     const dataURL = `data:image/png;base64,${icon}`;
     this.send("active", {
       app: this.app,
